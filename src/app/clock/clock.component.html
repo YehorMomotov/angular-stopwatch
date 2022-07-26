@@ -1,0 +1,19 @@
+<div class="clock-wrapper" (click)="mouseClicking()">
+  <div class="clock">
+    <div class="divisions">
+      <div
+        *ngFor="let division of divisionsArray; let i = index"
+        [ngStyle]="{ '--i': i }"
+        class="divisions__division"
+      ></div>
+    </div>
+    <div
+      class="clock__seconds"
+      [ngStyle]="{ '--angle': angles.secondAngle || '0deg' }"
+    ></div>
+    <div
+      class="clock__minutes"
+      [ngStyle]="{ '--angle': angles.minuteAngle || '0deg' }"
+    ></div>
+  </div>
+</div>

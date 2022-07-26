@@ -1,0 +1,28 @@
+.app-wraper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 10px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+}
+.time {
+  display: flex;
+}
+button {
+  background: rgba(255, 255, 255, 0.26);
+  border: none;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+  min-width: 120px;
+  &:hover {
+    filter: brightness(80%);
+  }
+  &:active {
+    filter: brightness(120%);
+  }
+}
