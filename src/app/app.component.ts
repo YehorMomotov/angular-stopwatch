@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription, timer } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { Angles } from './models';
 
@@ -10,14 +10,23 @@ import { Angles } from './models';
 })
 export class AppComponent implements OnInit, OnDestroy {
   countdown: Date = new Date(0);
-  time: Date = new Date();
+  startTime: Date = new Date();
   isStarted: Boolean = false;
   subscription: Subscription = new Subscription();
   angles: Angles = { minuteAngle: '0deg', secondAngle: '0deg' };
+  intervalId: any;
+  observable: Observable<any> = new Observable((observer) => {
+    this.intervalId = setInterval(() => {
+      const now = new Date();
+      observer.next(
+        new Date(Math.abs(now.getTime() - this.startTime.getTime()))
+      );
+    }, 100);
+  });
 
   wait() {
     if (this.angles.secondAngle !== '0deg') {
-      this.time = new Date(
+      this.startTime = new Date(
         Math.abs(new Date().getTime() - this.countdown.getTime())
       );
       this.chooseAndProceed();
@@ -25,27 +34,30 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   resetTime(): void {
-    this.time = new Date();
+    this.startTime = new Date();
     this.countdown = new Date(0);
   }
 
   countdownAction(): void {
     this.isStarted = !this.isStarted;
-    this.time = new Date();
+    this.startTime = new Date();
     this.chooseAndProceed();
   }
 
   chooseAndProceed(): void {
-    if (!this.subscription.closed) {
+    if (this.intervalId) {
       this.subscription.unsubscribe();
+      clearInterval(this.intervalId);
+      this.intervalId = null;
     } else {
-      this.startCounting();
+      if (this.isStarted) {
+        this.startCounting();
+      }
     }
   }
   startCounting(): void {
-    this.subscription = timer(0, 1).subscribe(() => {
-      const now = new Date();
-      this.countdown = new Date(Math.abs(now.getTime() - this.time.getTime()));
+    this.observable.subscribe((value) => {
+      this.countdown = value;
       this.calculateAngles();
     });
   }

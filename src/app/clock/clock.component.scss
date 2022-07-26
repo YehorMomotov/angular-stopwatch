@@ -57,9 +57,6 @@
         transform: translateX(-50%) translateY(-50%)
           rotate(calc(6deg * var(--i)));
         border-left: rgba(255, 255, 255, 1) 3px solid;
-        background: linear-gradient(135deg, #ffffffa6, #ffffff00);
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        mask-composite: xor;
       }
     }
   }

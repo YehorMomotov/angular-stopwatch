@@ -10,27 +10,35 @@ import { Angles } from '../models';
 export class ClockComponent implements OnInit {
   @Input() angles: Angles;
   @Output() mouseDoubleClicked = new EventEmitter<void>();
+
   wasAlreadyClicked: Boolean = false;
   observe: Observable<Boolean>;
   subscription: Subscription = new Subscription();
   divisionsArray: Array<any> = [];
+  intervalId: any;
+
   mouseClicking(): void {
-    this.subscription = this.observe.subscribe((value) => {
-      this.wasAlreadyClicked = value;
-    });
+    if (!this.wasAlreadyClicked) {
+      this.subscription = this.observe.subscribe((value) => {
+        this.wasAlreadyClicked = value;
+      });
+    }
 
     if (this.wasAlreadyClicked) {
+      this.wasAlreadyClicked = false;
       this.mouseDoubleClicked.emit();
       this.subscription.unsubscribe();
+      clearInterval(this.intervalId);
+      return;
     }
-    this.wasAlreadyClicked = !this.wasAlreadyClicked;
+    this.wasAlreadyClicked = true;
   }
 
   ngOnInit(): void {
     this.divisionsArray.length = 60;
     this.observe = new Observable((observer) => {
-      setTimeout(() => {
-        if (!this.wasAlreadyClicked) {
+      this.intervalId = setTimeout(() => {
+        if (this.wasAlreadyClicked) {
           observer.next(false);
           observer.complete();
         }
