@@ -2,7 +2,7 @@
   <h1>Angular Stopwatch</h1>
   <app-clock [angles]="angles" (mouseDoubleClicked)="wait()"></app-clock>
   <p class="time">
-    {{ countdown | date: "mm:ss:SSS" }}
+    {{ countdown | date: "mm:ss" }}
   </p>
   <div>
     <button (click)="countdownAction()">
